@@ -22,6 +22,7 @@ import { chat } from './chat.ts';
 // }) as any);
 
 listenAndServe({ port: 80 }, async (req) => {
+  console.log('🚀 ~ file: server.ts ~ line 25 ~ listenAndServe ~ req', req)
   if (req.method === 'GET' && req.url === '/') {
     req.respond({
       status: 200,
