@@ -12,7 +12,7 @@ if (isNaN(port)) {
   Deno.exit(1);
 }
 
-listenAndServe({ port: 3000 }, async (req) => {
+listenAndServe({ port }, async (req) => {
   if (req.method === 'GET' && req.url === '/') {
     req.respond({
       status: 200,
