@@ -9,14 +9,26 @@
 <body>
   Simple Deno Chat
   <div id="chat"></div>
+
+  <div>
+
+    <input type="text" id="input">
+    <button onclick="send()">Send</button>
+  </div>
   <script>
-    const ws = new WebSocket('wss://simple-deno-chat.herokuapp.com/ws')
+    const ws = new WebSocket(`wss://${window.location.host}/ws`)
     const chat = document.querySelector('#chat');
+    const input = document.querySelector('#input');
+
     ws.addEventListener('message', ({ data }) => {
       const message = document.createElement('div');
       message.innerText = data;
       chat.appendChild(message);
     })
+
+    function send(){
+      ws.send(input.value)
+    }
   </script>
 </body>
 
