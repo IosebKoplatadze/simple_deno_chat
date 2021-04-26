@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Simple Deno Chat</title>
-  </head>
-  <body>
-    Simple Deno Chat
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Simple Deno Chat</title>
+</head>
+
+<body>
+  Simple Deno Chat
+  <div id="chat"></div>
+  <script>
+    const ws = new WebSocket('wss://simple-deno-chat.herokuapp.com/ws')
+    const chat = document.querySelector('#chat');
+    ws.addEventListener('message', ({ data }) => {
+      const message = document.createElement('div');
+      message.innerText = data;
+      chat.appendChild(message);
+    })
+  </script>
+</body>
+
 </html>
