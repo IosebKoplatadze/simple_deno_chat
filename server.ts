@@ -1,19 +1,38 @@
-import { listenAndServe } from "https://deno.land/std/http/server.ts";
-import { acceptWebSocket, acceptable } from "https://deno.land/std/ws/mod.ts";
-import { chat } from "./chat.ts";
+import { listenAndServe } from 'https://deno.land/std/http/server.ts';
+import { acceptWebSocket, acceptable } from 'https://deno.land/std/ws/mod.ts';
+import { chat } from './chat.ts';
 
-listenAndServe({ port: 3000 }, async (req) => {
-  if (req.method === "GET" && req.url === "/") {
+// addEventListener('fetch',  ((event:any) => {
+//   const req=event.request as Request;
+//   if (req.method === 'GET' && req.url === '/') {
+//     const html = new URL('index.html', import.meta.url);
+//     return fetch(html);
+//   }
+
+//   // if (req.method === 'GET' && req.url === '/ws') {
+//   //   if (acceptable(req)) {event
+//   //     acceptWebSocket({
+//   //       conn: req,
+//   //       bufReader: req.r,
+//   //       bufWriter: req.w,
+//   //       headers: req.headers,
+//   //     }).then(chat);
+//   //   }
+//   // }
+// }) as any);
+
+listenAndServe({ port: 80 }, async (req) => {
+  if (req.method === 'GET' && req.url === '/') {
     req.respond({
       status: 200,
       headers: new Headers({
-        "content-type": "text/html",
+        'content-type': 'text/html',
       }),
-      body: await Deno.open("./index.html"),
+      body: await Deno.open('./index.html'),
     });
   }
 
-  if (req.method === "GET" && req.url === "/ws") {
+  if (req.method === 'GET' && req.url === '/ws') {
     if (acceptable(req)) {
       acceptWebSocket({
         conn: req.conn,
@@ -25,4 +44,4 @@ listenAndServe({ port: 3000 }, async (req) => {
   }
 });
 
-console.log("Server running on localhost:3000");
+console.log('Server running');
