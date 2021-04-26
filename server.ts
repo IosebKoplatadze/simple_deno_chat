@@ -1,27 +1,18 @@
-function handleRequest(request: Request) {
-  const { pathname } = new URL(request.url);
+import { serve } from "https://deno.land/std@0.83.0/http/server.ts";
+import * as flags from "https://deno.land/std@0.83.0/flags/mod.ts";
 
-  if (request.method === 'GET' && pathname === '/') {
-    const html = new URL('index.html', import.meta.url);
-    return fetch(html);
-  }
-  return new Response(
-    `<html>
-      <head>
-        <link rel="stylesheet" href="style.css" />
-      </head>
-      <body>
-        <h1>Example</h1>
-      </body>
-    </html>`,
-    {
-      headers: {
-        'content-type': 'text/html; charset=utf-8',
-      },
-    }
-  );
+const DEFAULT_PORT = 8080;
+const argPort = flags.parse(Deno.args).port;
+const port = argPort ? Number(argPort) : DEFAULT_PORT;
+
+if (isNaN(port)) {
+  console.error("Port is not a number.");
+  Deno.exit(1);
 }
 
-addEventListener('fetch', (event: any) => {
-  event.respondWith(handleRequest(event.request));
-});
+const s = serve({ port: port });
+console.log("http://localhost:" + port);
+
+for await (const req of s) {
+  req.respond({ body: "Hello Keti\n" });
+}
