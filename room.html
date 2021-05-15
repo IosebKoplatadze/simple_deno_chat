@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Simple Deno Room</title>
+</head>
+
+<body>
+  Simple Deno Room
+
+
+  <video controls></video>
+  <script>
+    const ws = new WebSocket(`wss://${window.location.host}/ws${window.location.pathname}`)
+    const videoSrc = decodeURIComponent(window.location.pathname.replace('/room/', ''));
+    const video = document.getElementsByTagName('video')[0];
+    video.src = videoSrc;
+
+    video.addEventListener('play', () => {
+      console.log('🚀 ~ file: room.html ~ line 18 ~ video.addEventListener ~ play')
+      ws.send( JSON.stringify({ command: 'play', time: video.currentTime }));
+    });
+
+    video.addEventListener('pause', () => {
+      console.log('🚀 ~ file: room.html ~ line 23 ~ video.addEventListener ~ pause')
+      ws.send( JSON.stringify({ command: 'pause', time: video.currentTime }));
+    });
+
+    ws.addEventListener('message', ({ data }) => {
+      data=JSON.parse(data);
+      console.log('🚀 ~ file: room.html ~ line 28 ~ ws.addEventListener ~ command', data)
+      switch (data.command) {
+        case 'play':
+          video.play();
+          break;
+        case 'pause':
+          video.pause();
+          break;
+      }
+      video.currentTime = data.time;
+    })
+  </script>
+</body>
+
+</html>
