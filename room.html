@@ -19,26 +19,30 @@
 
     video.addEventListener('play', () => {
       console.log('🚀 ~ file: room.html ~ line 18 ~ video.addEventListener ~ play')
-      ws.send( JSON.stringify({ command: 'play', time: video.currentTime }));
+      ws.send(JSON.stringify({ command: 'play', time: video.currentTime }));
     });
 
     video.addEventListener('pause', () => {
       console.log('🚀 ~ file: room.html ~ line 23 ~ video.addEventListener ~ pause')
-      ws.send( JSON.stringify({ command: 'pause', time: video.currentTime }));
+      ws.send(JSON.stringify({ command: 'pause', time: video.currentTime }));
     });
 
     ws.addEventListener('message', ({ data }) => {
-      data=JSON.parse(data);
+      data = JSON.parse(data);
       console.log('🚀 ~ file: room.html ~ line 28 ~ ws.addEventListener ~ command', data)
+      video.currentTime = data.time;
       switch (data.command) {
         case 'play':
-          video.play();
+          if (video.paused) {
+            video.play();
+          }
           break;
         case 'pause':
-          video.pause();
+          if (!video.paused) {
+            video.pause();
+          }
           break;
       }
-      video.currentTime = data.time;
     })
   </script>
 </body>
